@@ -95,7 +95,8 @@ export function Teleprompter() {
             direction,
             paddingLeft: `${hMargin}px`,
             paddingRight: `${hMargin}px`,
-            paddingTop: `calc(35% - ${fontSize}px)`, // Push first line below center
+            paddingTop: `calc(35% - ${fontSize}px)`,
+            paddingBottom: `calc(35% - ${fontSize}px)`,
           }}
         >
           {content.split("\n").map((line, index) => (
