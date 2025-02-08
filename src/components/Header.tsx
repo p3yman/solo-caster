@@ -145,7 +145,7 @@ export const Header = () => {
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
-                  <SheetTitle>Edit content</SheetTitle>
+                  <SheetTitle>More settings</SheetTitle>
                   <SheetDescription></SheetDescription>
                 </SheetHeader>
                 <div className="grid gap-6 py-4">
