@@ -13,6 +13,8 @@ interface SettingsValues {
   showIndicator: boolean;
   scrolling: boolean;
   recording: boolean;
+  cameraPreview: boolean;
+  grid: boolean;
 }
 
 export interface SettingsContextType extends SettingsValues {
@@ -27,6 +29,8 @@ export interface SettingsContextType extends SettingsValues {
   setShowIndicator: (showIndicator: boolean) => void;
   setScrolling: (scrolling: boolean) => void;
   setRecording: (recording: boolean) => void;
+  setCameraPreview: (cameraPreview: boolean) => void;
+  setGrid: (grid: boolean) => void;
   reset: () => void;
 }
 
@@ -97,6 +101,8 @@ const initialValue: SettingsValues = {
   showIndicator: true,
   scrolling: false,
   recording: false,
+  cameraPreview: true,
+  grid: true,
 };
 
 export const SettingsContextProvider = ({
@@ -110,27 +116,30 @@ export const SettingsContextProvider = ({
   );
 
   const setContent = (content: string) =>
-    setSettings((prev) => ({ ...prev, content }));
+    setSettings(() => ({ ...settings, content }));
   const setFontSize = (fontSize: number) =>
-    setSettings((prev) => ({ ...prev, fontSize }));
+    setSettings(() => ({ ...settings, fontSize }));
   const setVMargin = (vMargin: number) =>
-    setSettings((prev) => ({ ...prev, vMargin }));
+    setSettings(() => ({ ...settings, vMargin }));
   const setHMargin = (hMargin: number) =>
-    setSettings((prev) => ({ ...prev, hMargin }));
+    setSettings(() => ({ ...settings, hMargin }));
   const setLineSpacing = (lineSpacing: number) =>
-    setSettings((prev) => ({ ...prev, lineSpacing }));
+    setSettings(() => ({ ...settings, lineSpacing }));
   const setTextAlign = (textAlign: string) =>
-    setSettings((prev) => ({ ...prev, textAlign }));
+    setSettings(() => ({ ...settings, textAlign }));
   const setSpeed = (speed: number) =>
-    setSettings((prev) => ({ ...prev, speed }));
+    setSettings(() => ({ ...settings, speed }));
   const setDirection = (direction: string) =>
-    setSettings((prev) => ({ ...prev, direction }));
+    setSettings(() => ({ ...settings, direction }));
   const setShowIndicator = (showIndicator: boolean) =>
-    setSettings((prev) => ({ ...prev, showIndicator }));
+    setSettings(() => ({ ...settings, showIndicator }));
   const setScrolling = (scrolling: boolean) =>
-    setSettings((prev) => ({ ...prev, scrolling }));
+    setSettings(() => ({ ...settings, scrolling }));
   const setRecording = (recording: boolean) =>
-    setSettings((prev) => ({ ...prev, recording }));
+    setSettings(() => ({ ...settings, recording }));
+  const setCameraPreview = (cameraPreview: boolean) =>
+    setSettings(() => ({ ...settings, cameraPreview }));
+  const setGrid = (grid: boolean) => setSettings(() => ({ ...settings, grid }));
 
   const reset = () => setSettings(initialValue);
 
@@ -149,6 +158,8 @@ export const SettingsContextProvider = ({
         setShowIndicator,
         setScrolling,
         setRecording,
+        setCameraPreview,
+        setGrid,
         reset,
       }}
     >

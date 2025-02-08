@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { cn } from "../../lib/utils";
 
 type SliderProps = {
   min?: number;
   max?: number;
   step?: number;
   value: number[];
+  className?: string;
   onValueChange: (value: number[]) => void;
 };
 
@@ -13,6 +15,7 @@ export function Slider({
   max = 100,
   step = 1,
   value,
+  className,
   onValueChange,
 }: SliderProps) {
   const [sliderValue, setSliderValue] = useState(value[0]);
@@ -24,7 +27,7 @@ export function Slider({
   };
 
   return (
-    <div className="flex w-36 items-center gap-2">
+    <div className={cn("flex w-32 items-center gap-2", className)}>
       <input
         type="range"
         min={min}
