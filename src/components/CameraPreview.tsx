@@ -5,7 +5,7 @@ export function CameraPreview() {
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
   const [selectedCamera, setSelectedCamera] = useState<string | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const streamRef = useRef<MediaStream | null>(null); // 🔥 Track the active stream
+  const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
     async function getCameras() {
@@ -14,7 +14,7 @@ export function CameraPreview() {
           video: true,
         });
         setHasPermission(true);
-        stream.getTracks().forEach((track) => track.stop()); // Stop initial request
+        stream.getTracks().forEach((track) => track.stop());
 
         const devices = await navigator.mediaDevices.enumerateDevices();
         const videoDevices = devices.filter(
@@ -26,6 +26,7 @@ export function CameraPreview() {
           setSelectedCamera(videoDevices[0].deviceId);
         }
       } catch (error) {
+        console.log(error);
         setHasPermission(false);
       }
     }
@@ -37,11 +38,10 @@ export function CameraPreview() {
     async function startCamera() {
       if (!selectedCamera || !videoRef.current) return;
 
-      // 🔥 Fully release any existing camera stream
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
         streamRef.current = null;
-        videoRef.current.srcObject = null; // 🔥 Clear the video element reference
+        videoRef.current.srcObject = null;
       }
 
       try {
@@ -59,15 +59,15 @@ export function CameraPreview() {
     startCamera();
 
     return () => {
-      // 🔥 Ensure camera fully releases when unmounting
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => {
           track.stop();
-          streamRef.current?.removeTrack(track); // 🔥 Remove track explicitly
+          streamRef.current?.removeTrack(track);
         });
         streamRef.current = null;
         if (videoRef.current) {
-          videoRef.current.srcObject = null; // 🔥 Clear video reference
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+          videoRef.current.srcObject = null;
         }
       }
     };

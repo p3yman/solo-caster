@@ -19,7 +19,7 @@ export function Teleprompter() {
   const lastFrameTime = useRef<number>(0);
   const rafId = useRef<number | null>(null);
 
-  const effectiveSpeed = speed * 0.2;
+  const effectiveSpeed = speed * 0.15;
 
   const animateScroll = useCallback(
     (timestamp: number) => {
@@ -79,11 +79,11 @@ export function Teleprompter() {
   return (
     <div className="relative h-full w-full">
       {showIndicator && (
-        <div className="absolute top-1/2 left-0 -z-0 -mt-10 h-20 w-full bg-red-500/15"></div>
+        <div className="absolute left-0 top-1/2 -z-0 -mt-10 h-20 w-full bg-red-500/15"></div>
       )}
       <div
         ref={scrollRef}
-        className="relative h-full w-full overflow-x-hidden overflow-y-auto text-white"
+        className="relative h-full w-full overflow-y-auto overflow-x-hidden text-white"
         style={{ paddingTop: `${vMargin}px`, paddingBottom: `${vMargin}px` }}
       >
         <div

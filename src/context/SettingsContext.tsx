@@ -1,3 +1,4 @@
+import { exampleText } from "@/lib/exampleText";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { ReactNode, createContext, useContext } from "react";
 
@@ -34,7 +35,7 @@ export interface SettingsContextType extends SettingsValues {
   setScrolling: (scrolling: boolean) => void;
   setRecording: (recording: boolean) => void;
   setShowCamera: (cameraPreview: boolean) => void;
-  setShowgitGrid: (grid: boolean) => void;
+  setShowGrid: (grid: boolean) => void;
   setShowTeleprompter: (showTeleprompter: boolean) => void;
   reset: () => void;
 }
@@ -44,7 +45,7 @@ const SettingsContext = createContext<SettingsContextType | undefined>(
 );
 
 const initialValue: SettingsValues = {
-  content: "Write your content here",
+  content: exampleText,
   fontSize: 86,
   vMargin: 0,
   hMargin: 300,
