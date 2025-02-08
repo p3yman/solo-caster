@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 export function CameraPreview() {
   const { selectedCamera, setSelectedCamera } = useSettings();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
@@ -21,7 +20,6 @@ export function CameraPreview() {
         const videoDevices = devices.filter(
           (device) => device.kind === "videoinput",
         );
-        setCameras(videoDevices);
 
         if (videoDevices.length > 0) {
           setSelectedCamera(videoDevices[0].deviceId);
@@ -33,7 +31,7 @@ export function CameraPreview() {
     }
 
     getCameras();
-  }, []);
+  }, [setSelectedCamera]);
 
   useEffect(() => {
     async function startCamera() {
