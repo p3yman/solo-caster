@@ -13,23 +13,41 @@ export function Teleprompter() {
     direction,
     showIndicator,
   } = useSettings();
-  const [scrolling, setScrolling] = useState(false);
+
+  const [, setScrolling] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const intervalRef = useRef<unknown | null>(null);
+  const lastFrameTime = useRef<number>(0);
+  const rafId = useRef<number | null>(null);
+
+  const effectiveSpeed = speed * 0.2;
+
+  const animateScroll = useCallback(
+    (timestamp: number) => {
+      if (!scrollRef.current) return;
+
+      if (!lastFrameTime.current) lastFrameTime.current = timestamp;
+
+      const deltaTime = (timestamp - lastFrameTime.current) / 1000;
+      lastFrameTime.current = timestamp;
+
+      const scrollAmount = effectiveSpeed * deltaTime * 60;
+      scrollRef.current.scrollBy({ top: scrollAmount });
+
+      rafId.current = requestAnimationFrame(animateScroll);
+    },
+    [effectiveSpeed],
+  );
 
   const startScrolling = useCallback(() => {
-    if (intervalRef.current) return;
-    intervalRef.current = setInterval(() => {
-      if (scrollRef.current) {
-        scrollRef.current.scrollBy({ top: speed, behavior: "smooth" });
-      }
-    }, 50);
-  }, [speed]);
+    if (rafId.current) return;
+    lastFrameTime.current = performance.now();
+    rafId.current = requestAnimationFrame(animateScroll);
+  }, [animateScroll]);
 
   const stopScrolling = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
+    if (rafId.current) {
+      cancelAnimationFrame(rafId.current);
+      rafId.current = null;
     }
   };
 
@@ -47,10 +65,10 @@ export function Teleprompter() {
         });
       }
       if (e.key === "ArrowUp") {
-        scrollRef.current?.scrollBy({ top: -20, behavior: "smooth" });
+        scrollRef.current?.scrollBy({ top: -20 });
       }
       if (e.key === "ArrowDown") {
-        scrollRef.current?.scrollBy({ top: 20, behavior: "smooth" });
+        scrollRef.current?.scrollBy({ top: 20 });
       }
     };
 
@@ -65,7 +83,7 @@ export function Teleprompter() {
       )}
       <div
         ref={scrollRef}
-        className="relative h-full w-full overflow-hidden text-white"
+        className="relative h-full w-full overflow-auto text-white"
         style={{ paddingTop: `${vMargin}px`, paddingBottom: `${vMargin}px` }}
       >
         <div
@@ -77,6 +95,7 @@ export function Teleprompter() {
             direction: direction as "ltr" | "rtl",
             paddingLeft: `${hMargin}px`,
             paddingRight: `${hMargin}px`,
+            paddingTop: `calc(50% - ${fontSize}px)`, // Push first line below center
           }}
         >
           {content.split("\n").map((line, index) => (
