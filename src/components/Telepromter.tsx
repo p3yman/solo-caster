@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback, useState } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { useSettings } from "../context/SettingsContext";
 
 export function Teleprompter() {
@@ -12,9 +12,9 @@ export function Teleprompter() {
     textAlign,
     direction,
     showIndicator,
+    scrolling,
+    setScrolling,
   } = useSettings();
-
-  const [, setScrolling] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const lastFrameTime = useRef<number>(0);
   const rafId = useRef<number | null>(null);
@@ -55,14 +55,12 @@ export function Teleprompter() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === " ") {
         e.preventDefault();
-        setScrolling((prev) => {
-          if (prev) {
-            stopScrolling();
-          } else {
-            startScrolling();
-          }
-          return !prev;
-        });
+        if (scrolling) {
+          stopScrolling();
+        } else {
+          startScrolling();
+        }
+        setScrolling(!scrolling);
       }
       if (e.key === "ArrowUp") {
         scrollRef.current?.scrollBy({ top: -20 });
@@ -74,7 +72,19 @@ export function Teleprompter() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [startScrolling]);
+  }, [scrolling, setScrolling, startScrolling]);
+
+  useEffect(() => {
+    if (scrolling) {
+      startScrolling();
+    } else {
+      stopScrolling();
+    }
+
+    return () => {
+      stopScrolling();
+    };
+  }, [scrolling, startScrolling]);
 
   return (
     <div className="relative h-full w-full">

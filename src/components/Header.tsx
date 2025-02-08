@@ -6,8 +6,10 @@ import {
   BetweenHorizonalStart,
   Camera,
   FoldHorizontal,
+  Pause,
   PilcrowLeft,
   PilcrowRight,
+  Play,
   Rabbit,
   Settings,
   Turtle,
@@ -55,11 +57,16 @@ export const Header = () => {
     setTextAlign,
     direction,
     setDirection,
+    scrolling,
+    setScrolling,
   } = useSettings();
   return (
     <>
       <div className="absolute left-0 top-0 z-50 flex w-screen flex-col items-center justify-center border-b border-white/10 bg-black/90 px-2 py-4 text-white">
         <div className="flex items-center gap-4">
+          <Button onClick={() => setScrolling(!scrolling)} size="icon">
+            {scrolling ? <Pause /> : <Play />}
+          </Button>
           <div className="flex items-center gap-2">
             <Turtle className="text-sm" />
             <Slider
