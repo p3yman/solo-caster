@@ -77,13 +77,13 @@ export function Teleprompter() {
   }, [startScrolling]);
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center space-y-4 p-4">
+    <div className="relative h-full w-full">
       {showIndicator && (
-        <div className="absolute top-1/2 left-0 z-50 -mt-10 h-20 w-full bg-red-500/15"></div>
+        <div className="absolute top-1/2 left-0 -z-0 -mt-10 h-20 w-full bg-red-500/15"></div>
       )}
       <div
         ref={scrollRef}
-        className="relative h-full w-full overflow-auto text-white"
+        className="relative h-full w-full overflow-x-hidden overflow-y-auto text-white"
         style={{ paddingTop: `${vMargin}px`, paddingBottom: `${vMargin}px` }}
       >
         <div
@@ -91,11 +91,11 @@ export function Teleprompter() {
           style={{
             fontSize: `${fontSize}px`,
             lineHeight: `${lineSpacing}`,
-            textAlign: textAlign as "left" | "center" | "right",
-            direction: direction as "ltr" | "rtl",
+            textAlign,
+            direction,
             paddingLeft: `${hMargin}px`,
             paddingRight: `${hMargin}px`,
-            paddingTop: `calc(50% - ${fontSize}px)`, // Push first line below center
+            paddingTop: `calc(35% - ${fontSize}px)`, // Push first line below center
           }}
         >
           {content.split("\n").map((line, index) => (

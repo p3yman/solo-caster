@@ -2,3 +2,12 @@
 
 @theme {
 }
+
+/* Hide scrollbar but keep scroll functionality */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+.scrollbar-hidden {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Edge */
+}

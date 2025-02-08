@@ -5,6 +5,7 @@ export function CameraPreview() {
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
   const [selectedCamera, setSelectedCamera] = useState<string | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const streamRef = useRef<MediaStream | null>(null); // 🔥 Track the active stream
 
   useEffect(() => {
     async function getCameras() {
@@ -13,7 +14,7 @@ export function CameraPreview() {
           video: true,
         });
         setHasPermission(true);
-        stream.getTracks().forEach((track) => track.stop()); // Stop initial stream
+        stream.getTracks().forEach((track) => track.stop()); // Stop initial request
 
         const devices = await navigator.mediaDevices.enumerateDevices();
         const videoDevices = devices.filter(
@@ -25,7 +26,6 @@ export function CameraPreview() {
           setSelectedCamera(videoDevices[0].deviceId);
         }
       } catch (error) {
-        console.log({ error });
         setHasPermission(false);
       }
     }
@@ -35,27 +35,46 @@ export function CameraPreview() {
 
   useEffect(() => {
     async function startCamera() {
-      if (selectedCamera && videoRef.current) {
+      if (!selectedCamera || !videoRef.current) return;
+
+      // 🔥 Fully release any existing camera stream
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
+        videoRef.current.srcObject = null; // 🔥 Clear the video element reference
+      }
+
+      try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: { deviceId: { exact: selectedCamera } },
         });
+
+        streamRef.current = stream;
         videoRef.current.srcObject = stream;
+      } catch (error) {
+        console.error("Error accessing camera:", error);
       }
     }
 
     startCamera();
 
     return () => {
-      if (videoRef.current?.srcObject) {
-        (videoRef.current.srcObject as MediaStream)
-          .getTracks()
-          .forEach((track) => track.stop());
+      // 🔥 Ensure camera fully releases when unmounting
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => {
+          track.stop();
+          streamRef.current?.removeTrack(track); // 🔥 Remove track explicitly
+        });
+        streamRef.current = null;
+        if (videoRef.current) {
+          videoRef.current.srcObject = null; // 🔥 Clear video reference
+        }
       }
     };
   }, [selectedCamera]);
 
   return (
-    <div className="absolute inset-0 flex h-full w-full flex-col items-center">
+    <div className="absolute inset-0 flex w-full flex-col items-center">
       {hasPermission === false ? (
         <p className="text-red-500">
           Camera access is denied. Please enable permissions.
@@ -63,7 +82,7 @@ export function CameraPreview() {
       ) : (
         <>
           <select
-            className="mt-2 rounded-md border p-2"
+            className="mt-2 rounded-md p-2"
             value={selectedCamera || ""}
             onChange={(e) => setSelectedCamera(e.target.value)}
           >
@@ -74,7 +93,7 @@ export function CameraPreview() {
             ))}
           </select>
 
-          <div className="relative mt-4 h-full w-full bg-black">
+          <div className="relative h-full w-full">
             <video
               ref={videoRef}
               className="absolute inset-0 h-full w-full object-cover"

@@ -5,7 +5,7 @@ import { SettingsContextProvider } from "./context/SettingsContext";
 function App() {
   return (
     <SettingsContextProvider>
-      <div className="flex h-screen w-screen items-center justify-center bg-black text-white">
+      <div className="bg-black p-0 text-white">
         <Header />
         <Screen />
       </div>

@@ -1,20 +1,24 @@
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { ReactNode, createContext, useContext } from "react";
 
+type TextAlign = "left" | "center" | "right";
+type Direction = "ltr" | "rtl";
+
 interface SettingsValues {
   content: string;
   fontSize: number;
   vMargin: number;
   hMargin: number;
   lineSpacing: number;
-  textAlign: string;
   speed: number;
-  direction: string;
+  textAlign: TextAlign;
+  direction: Direction;
   showIndicator: boolean;
   scrolling: boolean;
   recording: boolean;
-  cameraPreview: boolean;
-  grid: boolean;
+  showCamera: boolean;
+  showGrid: boolean;
+  showTeleprompter: boolean;
 }
 
 export interface SettingsContextType extends SettingsValues {
@@ -23,14 +27,15 @@ export interface SettingsContextType extends SettingsValues {
   setVMargin: (vMargin: number) => void;
   setHMargin: (hMargin: number) => void;
   setLineSpacing: (lineSpacing: number) => void;
-  setTextAlign: (textAlign: string) => void;
   setSpeed: (speed: number) => void;
-  setDirection: (direction: string) => void;
+  setTextAlign: (textAlign: TextAlign) => void;
+  setDirection: (direction: Direction) => void;
   setShowIndicator: (showIndicator: boolean) => void;
   setScrolling: (scrolling: boolean) => void;
   setRecording: (recording: boolean) => void;
-  setCameraPreview: (cameraPreview: boolean) => void;
-  setGrid: (grid: boolean) => void;
+  setShowCamera: (cameraPreview: boolean) => void;
+  setShowGrid: (grid: boolean) => void;
+  setShowTeleprompter: (showTeleprompter: boolean) => void;
   reset: () => void;
 }
 
@@ -92,8 +97,8 @@ const initialValue: SettingsValues = {
 انشای امروز هم تموم شد خداروشکر. شما هم اگه راهی واسه یادگیری بلدین حتما کامنت کنین، قطعا می‌خونم و جواب میدم. 
 این ویدئو هم ممکنه به نظرتون به درد بخور باشه اگه چیز دیگه تو این یوتوب برای دیدن پیدا نکردین. فعلا.`,
   fontSize: 64,
-  vMargin: 20,
-  hMargin: 20,
+  vMargin: 0,
+  hMargin: 300,
   lineSpacing: 2,
   textAlign: "center",
   speed: 1,
@@ -101,8 +106,9 @@ const initialValue: SettingsValues = {
   showIndicator: true,
   scrolling: false,
   recording: false,
-  cameraPreview: true,
-  grid: true,
+  showCamera: true,
+  showTeleprompter: true,
+  showGrid: true,
 };
 
 export const SettingsContextProvider = ({
@@ -125,11 +131,11 @@ export const SettingsContextProvider = ({
     setSettings(() => ({ ...settings, hMargin }));
   const setLineSpacing = (lineSpacing: number) =>
     setSettings(() => ({ ...settings, lineSpacing }));
-  const setTextAlign = (textAlign: string) =>
+  const setTextAlign = (textAlign: TextAlign) =>
     setSettings(() => ({ ...settings, textAlign }));
   const setSpeed = (speed: number) =>
     setSettings(() => ({ ...settings, speed }));
-  const setDirection = (direction: string) =>
+  const setDirection = (direction: Direction) =>
     setSettings(() => ({ ...settings, direction }));
   const setShowIndicator = (showIndicator: boolean) =>
     setSettings(() => ({ ...settings, showIndicator }));
@@ -137,9 +143,12 @@ export const SettingsContextProvider = ({
     setSettings(() => ({ ...settings, scrolling }));
   const setRecording = (recording: boolean) =>
     setSettings(() => ({ ...settings, recording }));
-  const setCameraPreview = (cameraPreview: boolean) =>
-    setSettings(() => ({ ...settings, cameraPreview }));
-  const setGrid = (grid: boolean) => setSettings(() => ({ ...settings, grid }));
+  const setShowCamera = (showCamera: boolean) =>
+    setSettings(() => ({ ...settings, showCamera }));
+  const setShowGrid = (showGrid: boolean) =>
+    setSettings(() => ({ ...settings, showGrid }));
+  const setShowTeleprompter = (showTeleprompter: boolean) =>
+    setSettings(() => ({ ...settings, showTeleprompter }));
 
   const reset = () => setSettings(initialValue);
 
@@ -158,8 +167,9 @@ export const SettingsContextProvider = ({
         setShowIndicator,
         setScrolling,
         setRecording,
-        setCameraPreview,
-        setGrid,
+        setShowCamera,
+        setShowGrid,
+        setShowTeleprompter,
         reset,
       }}
     >
