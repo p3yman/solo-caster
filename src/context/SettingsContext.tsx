@@ -20,6 +20,7 @@ interface SettingsValues {
   showCamera: boolean;
   showGrid: boolean;
   showTeleprompter: boolean;
+  selectedCamera?: string;
 }
 
 export interface SettingsContextType extends SettingsValues {
@@ -37,6 +38,7 @@ export interface SettingsContextType extends SettingsValues {
   setShowCamera: (cameraPreview: boolean) => void;
   setShowGrid: (grid: boolean) => void;
   setShowTeleprompter: (showTeleprompter: boolean) => void;
+  setSelectedCamera: (cameraId: string) => void;
   reset: () => void;
 }
 
@@ -99,6 +101,8 @@ export const SettingsContextProvider = ({
     setSettings(() => ({ ...settings, showGrid }));
   const setShowTeleprompter = (showTeleprompter: boolean) =>
     setSettings(() => ({ ...settings, showTeleprompter }));
+  const setSelectedCamera = (selectedCamera: string) =>
+    setSettings(() => ({ ...settings, selectedCamera }));
 
   const reset = () => setSettings(initialValue);
 
@@ -120,6 +124,7 @@ export const SettingsContextProvider = ({
         setShowCamera,
         setShowGrid,
         setShowTeleprompter,
+        setSelectedCamera,
         reset,
       }}
     >

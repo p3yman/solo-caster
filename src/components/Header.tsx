@@ -4,16 +4,17 @@ import {
   AlignLeft,
   AlignRight,
   BetweenHorizonalStart,
+  Camera,
   FoldHorizontal,
   PilcrowLeft,
   PilcrowRight,
   Rabbit,
+  Settings,
   Turtle,
 } from "lucide-react";
 import { useSettings } from "../context/SettingsContext";
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
-import { useState } from "react";
 import { Label } from "./ui/label";
 import { Checkbox } from "./ui/checkbox";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
@@ -28,9 +29,9 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 import { Textarea } from "./ui/textarea";
+import { CameraSelector } from "./CameraSelector";
 
 export const Header = () => {
-  const [showMore, setShowMore] = useState(false);
   const {
     content,
     setContent,
@@ -58,32 +59,7 @@ export const Header = () => {
   return (
     <>
       <div className="absolute left-0 top-0 z-50 flex w-screen flex-col items-center justify-center border-b border-white/10 bg-black/90 px-2 py-4 text-white">
-        <div className="flex items-center gap-6">
-          {/* Edit content */}
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline">Edit content</Button>
-            </SheetTrigger>
-            <SheetContent className="w-[800px] !max-w-[90%]">
-              <SheetHeader>
-                <SheetTitle>Edit content</SheetTitle>
-                <SheetDescription></SheetDescription>
-              </SheetHeader>
-              <div className="grid gap-4 py-4">
-                <Textarea
-                  rows={21}
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  dir="auto"
-                />
-              </div>
-              <SheetFooter>
-                <SheetClose asChild>
-                  <Button type="submit">Save changes</Button>
-                </SheetClose>
-              </SheetFooter>
-            </SheetContent>
-          </Sheet>
+        <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <Turtle className="text-sm" />
             <Slider
@@ -128,72 +104,142 @@ export const Header = () => {
             />
             <Label htmlFor="showTeleprompter">Telepromter</Label>
           </div>
-          <Button onClick={() => setShowMore(!showMore)} variant="outline">
-            More
-          </Button>
-        </div>
-        {showMore && (
-          <div className="mt-4 flex items-center gap-6">
-            <div className="flex items-center gap-1">
-              <ALargeSmall className="text-sm" />
-              <Slider
-                min={32}
-                max={128}
-                value={[fontSize]}
-                onValueChange={(v) => setFontSize(v[0])}
-                className="w-32"
-              />
-            </div>
-            <div className="flex items-center gap-1">
-              <FoldHorizontal className="text-sm" />
-              <Slider
-                min={0}
-                max={600}
-                value={[hMargin]}
-                onValueChange={(v) => setHMargin(v[0])}
-                className="w-32"
-              />
-            </div>
-            <div className="flex items-center gap-1">
-              <BetweenHorizonalStart className="text-sm" />
-              <Slider
-                min={1}
-                max={3}
-                step={0.1}
-                value={[lineSpacing]}
-                onValueChange={(v) => setLineSpacing(v[0])}
-                className="w-32"
-              />
-            </div>
-            <ToggleGroup
-              type="single"
-              value={textAlign}
-              onValueChange={setTextAlign}
-            >
-              <ToggleGroupItem value="left">
-                <AlignLeft className="size-5" />
-              </ToggleGroupItem>
-              <ToggleGroupItem value="center">
-                <AlignCenter className="size-5" />
-              </ToggleGroupItem>
-              <ToggleGroupItem value="right">
-                <AlignRight className="size-5" />
-              </ToggleGroupItem>
-            </ToggleGroup>
-            <ToggleGroup
-              type="single"
-              value={direction}
-              onValueChange={setDirection}
-            >
-              <ToggleGroupItem value="ltr">
-                <PilcrowRight className="size-5" />
-              </ToggleGroupItem>
-              <ToggleGroupItem value="rtl">
-                <PilcrowLeft className="size-5" />
-              </ToggleGroupItem>
-            </ToggleGroup>
+          <div className="flex gap-2">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline">Edit content</Button>
+              </SheetTrigger>
+              <SheetContent className="w-[800px] !max-w-[90%]">
+                <SheetHeader>
+                  <SheetTitle>Edit content</SheetTitle>
+                  <SheetDescription></SheetDescription>
+                </SheetHeader>
+                <div className="grid gap-4 py-4">
+                  <Textarea
+                    rows={21}
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    dir="auto"
+                  />
+                </div>
+                <SheetFooter>
+                  <SheetClose asChild>
+                    <Button type="submit">Save changes</Button>
+                  </SheetClose>
+                </SheetFooter>
+              </SheetContent>
+            </Sheet>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" className="flex items-center gap-2">
+                  <Settings className="size-5" />
+                  More settings
+                </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Edit content</SheetTitle>
+                  <SheetDescription></SheetDescription>
+                </SheetHeader>
+                <div className="grid gap-6 py-4">
+                  <div className="grid gap-2">
+                    <Label className="flex items-center gap-2">
+                      <Camera className="size-5" />
+                      Camera
+                    </Label>
+                    <CameraSelector />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label className="flex items-center gap-2">
+                      <ALargeSmall className="size-5" />
+                      Font Size
+                    </Label>
+                    <Slider
+                      min={32}
+                      max={128}
+                      value={[fontSize]}
+                      onValueChange={(v) => setFontSize(v[0])}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label className="flex items-center gap-2">
+                      <FoldHorizontal className="size-5" />
+                      Horizontal Margin
+                    </Label>
+                    <Slider
+                      min={0}
+                      max={600}
+                      value={[hMargin]}
+                      onValueChange={(v) => setHMargin(v[0])}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label className="flex items-center gap-2">
+                      <BetweenHorizonalStart className="size-5" />
+                      Line Spacing
+                    </Label>
+                    <Slider
+                      min={1}
+                      max={3}
+                      step={0.1}
+                      value={[lineSpacing]}
+                      onValueChange={(v) => setLineSpacing(v[0])}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 items-start">
+                    <div className="grid items-start gap-2">
+                      <Label className="flex items-center gap-2">
+                        Text Alignment
+                      </Label>
+                      <ToggleGroup
+                        type="single"
+                        value={textAlign}
+                        onValueChange={setTextAlign}
+                        className="justify-start"
+                      >
+                        <ToggleGroupItem value="left">
+                          <AlignLeft className="size-5" />
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="center">
+                          <AlignCenter className="size-5" />
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="right">
+                          <AlignRight className="size-5" />
+                        </ToggleGroupItem>
+                      </ToggleGroup>
+                    </div>
+                    <div className="grid gap-2">
+                      <Label className="flex items-center gap-2">
+                        Direction
+                      </Label>
+                      <ToggleGroup
+                        type="single"
+                        value={direction}
+                        onValueChange={setDirection}
+                        className="justify-start"
+                      >
+                        <ToggleGroupItem value="ltr">
+                          <PilcrowRight className="size-5" />
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="rtl">
+                          <PilcrowLeft className="size-5" />
+                        </ToggleGroupItem>
+                      </ToggleGroup>
+                    </div>
+                  </div>
+                </div>
+                <SheetFooter>
+                  <SheetClose asChild>
+                    <Button>Close</Button>
+                  </SheetClose>
+                </SheetFooter>
+              </SheetContent>
+            </Sheet>
           </div>
-        )}
+        </div>
       </div>
     </>
   );

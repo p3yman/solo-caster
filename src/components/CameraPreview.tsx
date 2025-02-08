@@ -1,9 +1,10 @@
+import { useSettings } from "@/context/SettingsContext";
 import { useEffect, useRef, useState } from "react";
 
 export function CameraPreview() {
+  const { selectedCamera, setSelectedCamera } = useSettings();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
-  const [selectedCamera, setSelectedCamera] = useState<string | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
@@ -80,29 +81,15 @@ export function CameraPreview() {
           Camera access is denied. Please enable permissions.
         </p>
       ) : (
-        <>
-          <select
-            className="mt-2 rounded-md p-2"
-            value={selectedCamera || ""}
-            onChange={(e) => setSelectedCamera(e.target.value)}
-          >
-            {cameras.map((camera) => (
-              <option key={camera.deviceId} value={camera.deviceId}>
-                {camera.label || "Unknown Camera"}
-              </option>
-            ))}
-          </select>
-
-          <div className="relative h-full w-full">
-            <video
-              ref={videoRef}
-              className="absolute inset-0 h-full w-full object-cover"
-              autoPlay
-              playsInline
-              muted
-            />
-          </div>
-        </>
+        <div className="relative h-full w-full">
+          <video
+            ref={videoRef}
+            className="absolute inset-0 h-full w-full object-cover"
+            autoPlay
+            playsInline
+            muted
+          />
+        </div>
       )}
     </div>
   );
