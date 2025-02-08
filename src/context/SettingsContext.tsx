@@ -34,7 +34,7 @@ export interface SettingsContextType extends SettingsValues {
   setScrolling: (scrolling: boolean) => void;
   setRecording: (recording: boolean) => void;
   setShowCamera: (cameraPreview: boolean) => void;
-  setShowGrid: (grid: boolean) => void;
+  setShowgitGrid: (grid: boolean) => void;
   setShowTeleprompter: (showTeleprompter: boolean) => void;
   reset: () => void;
 }

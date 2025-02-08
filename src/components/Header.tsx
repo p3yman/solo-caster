@@ -38,6 +38,8 @@ export const Header = () => {
     setShowGrid,
     showTeleprompter,
     setShowTeleprompter,
+    setTextAlign,
+    setDirection,
   } = useSettings();
   return (
     <div className="absolute top-0 left-0 z-50 flex w-screen flex-col items-center justify-center bg-black/90 px-2 py-4 text-white">
@@ -106,21 +108,36 @@ export const Header = () => {
           </div>
           <div className="flex items-center gap-1">
             <Button>
-              <AlignLeft className="text-sm" />
+              <AlignLeft
+                className="text-sm"
+                onClick={() => setTextAlign("left")}
+              />
             </Button>
             <Button>
-              <AlignCenter className="text-sm" />
+              <AlignCenter
+                className="text-sm"
+                onClick={() => setTextAlign("center")}
+              />
             </Button>
             <Button>
-              <AlignRight className="text-sm" />
+              <AlignRight
+                className="text-sm"
+                onClick={() => setTextAlign("right")}
+              />
             </Button>
           </div>
           <div className="flex items-center gap-1">
             <Button>
-              <PilcrowRight className="text-sm" />
+              <PilcrowRight
+                className="text-sm"
+                onClick={() => setDirection("ltr")}
+              />
             </Button>
             <Button>
-              <PilcrowLeft className="text-sm" />
+              <PilcrowLeft
+                className="text-sm"
+                onClick={() => setDirection("rtl")}
+              />
             </Button>
           </div>
         </div>
