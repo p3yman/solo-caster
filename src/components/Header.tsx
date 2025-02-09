@@ -12,6 +12,7 @@ import {
   Play,
   Rabbit,
   Settings,
+  SquarePen,
   Turtle,
 } from "lucide-react";
 import { useSettings } from "../context/SettingsContext";
@@ -32,6 +33,7 @@ import {
 } from "./ui/sheet";
 import { Textarea } from "./ui/textarea";
 import { CameraSelector } from "./CameraSelector";
+import { OBSConnection } from "./OBSConnection";
 
 export const Header = () => {
   const {
@@ -81,27 +83,11 @@ export const Header = () => {
           </div>
           <div className="flex items-center space-x-2">
             <Checkbox
-              id="showIndicator"
-              checked={showIndicator}
-              onCheckedChange={setShowIndicator}
-            />
-            <Label htmlFor="showIndicator">Indicator</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox
               id="showCamera"
               checked={showCamera}
               onCheckedChange={setShowCamera}
             />
             <Label htmlFor="showCamera">Camera</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="showGrid"
-              checked={showGrid}
-              onCheckedChange={setShowGrid}
-            />
-            <Label htmlFor="showGrid">Grid</Label>
           </div>
           <div className="flex items-center space-x-2">
             <Checkbox
@@ -114,7 +100,9 @@ export const Header = () => {
           <div className="flex gap-2">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline">Edit content</Button>
+                <Button variant="outline" size="icon">
+                  <SquarePen className="size-5" />
+                </Button>
               </SheetTrigger>
               <SheetContent className="w-[800px] !max-w-[90%]">
                 <SheetHeader>
@@ -136,6 +124,7 @@ export const Header = () => {
                 </SheetFooter>
               </SheetContent>
             </Sheet>
+            <OBSConnection />
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="outline" className="flex items-center gap-2">
@@ -236,6 +225,22 @@ export const Header = () => {
                         </ToggleGroupItem>
                       </ToggleGroup>
                     </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="showGrid"
+                      checked={showGrid}
+                      onCheckedChange={setShowGrid}
+                    />
+                    <Label htmlFor="showGrid">Show Grid</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="showIndicator"
+                      checked={showIndicator}
+                      onCheckedChange={setShowIndicator}
+                    />
+                    <Label htmlFor="showIndicator">Show Indicator</Label>
                   </div>
                 </div>
                 <SheetFooter>

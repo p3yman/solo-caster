@@ -1,6 +1,7 @@
 import { useSettings } from "../context/SettingsContext";
 import { CameraPreview } from "./CameraPreview";
 import { GridOVerlay } from "./GridOverlay";
+import { RecordingFrame } from "./RecordingFrame";
 import { Teleprompter } from "./Telepromter";
 
 export const Screen = () => {
@@ -10,6 +11,7 @@ export const Screen = () => {
       {showCamera && <CameraPreview />}
       {showTeleprompter && <Teleprompter />}
       {showGrid && <GridOVerlay />}
+      <RecordingFrame />
     </div>
   );
 };
