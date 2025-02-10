@@ -54,7 +54,7 @@ export function Teleprompter() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === " ") {
-        e.preventDefault();
+        /* e.preventDefault(); */ //this has been preventing the default job of the space bar
         if (scrolling) {
           stopScrolling();
         } else {
