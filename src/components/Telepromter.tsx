@@ -1,5 +1,6 @@
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useContext } from "react";
 import { useSettings } from "../context/SettingsContext";
+import { SheetContext } from "@/App";
 
 export function Teleprompter() {
   const {
@@ -50,11 +51,12 @@ export function Teleprompter() {
       rafId.current = null;
     }
   };
+  const {sheetOn} = useContext(SheetContext);
+
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === " ") {
-        e.preventDefault();
+      if (e.key === " " && !sheetOn) {
         if (scrolling) {
           stopScrolling();
         } else {
@@ -62,10 +64,10 @@ export function Teleprompter() {
         }
         setScrolling(!scrolling);
       }
-      if (e.key === "ArrowUp") {
+      if (e.key === "ArrowUp" && !sheetOn) {
         scrollRef.current?.scrollBy({ top: -20 });
       }
-      if (e.key === "ArrowDown") {
+      if (e.key === "ArrowDown" && !sheetOn) {
         scrollRef.current?.scrollBy({ top: 20 });
       }
     };
