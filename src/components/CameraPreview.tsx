@@ -21,7 +21,7 @@ export function CameraPreview() {
           (device) => device.kind === "videoinput",
         );
 
-        if (videoDevices.length > 0) {
+        if (videoDevices.length > 0 && !selectedCamera) {
           setSelectedCamera(videoDevices[0].deviceId);
         }
       } catch (error) {
@@ -31,7 +31,7 @@ export function CameraPreview() {
     }
 
     getCameras();
-  }, [setSelectedCamera]);
+  }, [selectedCamera, setSelectedCamera]);
 
   useEffect(() => {
     async function startCamera() {
