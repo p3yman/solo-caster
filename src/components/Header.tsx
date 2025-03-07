@@ -34,7 +34,8 @@ import {
 import { Textarea } from "./ui/textarea";
 import { CameraSelector } from "./CameraSelector";
 import { OBSConnection } from "./OBSConnection";
-
+import { useContext } from "react";
+import { SheetContext } from "@/App";
 export const Header = () => {
   const {
     content,
@@ -62,12 +63,18 @@ export const Header = () => {
     scrolling,
     setScrolling,
   } = useSettings();
+
+  const {sheetOn, setSheetOn} = useContext(SheetContext);
+
+  const handleTrigger = () => {
+    setSheetOn(!sheetOn)
+    console.log("yes");}
   return (
     <>
       <div className="absolute left-0 top-0 z-50 flex w-screen flex-col items-center justify-center border-b border-white/10 bg-black/90 px-2 py-4 text-white">
         <div className="flex items-center gap-4">
           <Button onClick={() => setScrolling(!scrolling)} size="icon">
-            {scrolling ? <Pause /> : <Play />}
+            {scrolling && !sheetOn ? <Pause /> : <Play />}
           </Button>
           <div className="flex items-center gap-2">
             <Turtle className="text-sm" />
@@ -98,10 +105,10 @@ export const Header = () => {
             <Label htmlFor="showTeleprompter">Telepromter</Label>
           </div>
           <div className="flex gap-2">
-            <Sheet>
+            <Sheet open={sheetOn} onOpenChange={setSheetOn}>
               <SheetTrigger asChild>
                 <Button variant="outline" size="icon">
-                  <SquarePen className="size-5" />
+                  <SquarePen className="size-5"/>
                 </Button>
               </SheetTrigger>
               <SheetContent className="w-[800px] !max-w-[90%]">
@@ -119,7 +126,7 @@ export const Header = () => {
                 </div>
                 <SheetFooter>
                   <SheetClose asChild>
-                    <Button type="submit">Save changes</Button>
+                    <Button type="submit" onClick={handleTrigger}>Save changes</Button>
                   </SheetClose>
                 </SheetFooter>
               </SheetContent>
